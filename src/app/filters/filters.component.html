@@ -1,0 +1,37 @@
+<form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="filter-form">
+  <mat-form-field appearance="fill">
+    <mat-label>From Date</mat-label>
+    <input matInput [matDatepicker]="fromDatePicker" formControlName="fromDate" required>
+    <mat-datepicker-toggle matSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #fromDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>To Date</mat-label>
+    <input matInput [matDatepicker]="toDatePicker" formControlName="toDate" required>
+    <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #toDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <div>
+    <mat-checkbox
+      [checked]="filterForm.value.selectedOptions.length === checkBoxOptions.length"
+      (change)="
+        filterForm.patchValue({ selectedOptions: $event.checked ? checkBoxOptions : [] })
+      "
+    >
+      Select All
+    </mat-checkbox>
+    <div *ngFor="let option of checkBoxOptions">
+      <mat-checkbox
+        [checked]="filterForm.value.selectedOptions.includes(option)"
+        (change)="toggleOption(option, $event.checked)"
+      >
+        {{ option }}
+      </mat-checkbox>
+    </div>
+  </div>
+
+  <button mat-raised-button color="primary" type="button" (click)="fetchData()">Fetch Data</button>
+  <button mat-raised-button color="accent" type="submit">Apply Filters</button>
+</form>
